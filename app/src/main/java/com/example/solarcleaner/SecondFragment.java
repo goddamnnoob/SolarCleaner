@@ -5,8 +5,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -14,6 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -32,7 +35,7 @@ public class SecondFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getData();
+        getData(view);
         view.findViewById(R.id.button_second).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -41,7 +44,7 @@ public class SecondFragment extends Fragment {
             }
         });
     }
-    public void getData (){
+    public void getData (View view){
         DocumentReference docRef = database.collection("data").document("LkOqcFBkEXQKnV9ftIli");
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -50,9 +53,12 @@ public class SecondFragment extends Fragment {
                     DocumentSnapshot document = task.getResult();
                     if (document != null) {
                         Log.d("F2", "DocumentSnapshot data: " + task.getResult().getData());
+                        TextView t = view.findViewById(R.id.textview_second);
+                        t.setText(String.valueOf(task.getResult().getData()));
                     }
                 }
             }
         });
+
     }
 }
